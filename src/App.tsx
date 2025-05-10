@@ -6,7 +6,7 @@ import SubscribeForm from './components/SubscribeForm';
 function App() {
   // Set launch date to 30 days from now
   const launchDate = new Date();
-  launchDate.setDate(launchDate.getDate() + 5);
+  launchDate.setDate(launchDate.getDate() + 1);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-blue-900 via-indigo-900 to-blue-800 overflow-hidden">

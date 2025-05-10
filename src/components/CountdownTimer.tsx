@@ -20,14 +20,19 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
   });
 
   useEffect(() => {
+    // Save the target date in localStorage
+    localStorage.setItem('targetDate', targetDate.toISOString());
+
     const calculateTimeLeft = () => {
-      const difference = targetDate.getTime() - new Date().getTime();
-      
+      const storedTargetDate = localStorage.getItem('targetDate');
+      const target = storedTargetDate ? new Date(storedTargetDate) : targetDate;
+      const difference = target.getTime() - new Date().getTime();
+
       if (difference <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
         return;
       }
-      
+
       setTimeLeft({
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
