@@ -12,11 +12,11 @@ interface CountdownTimerProps {
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => {
+    const storedTimeLeft = localStorage.getItem('timeLeft');
+    return storedTimeLeft
+      ? JSON.parse(storedTimeLeft)
+      : { days: 0, hours: 0, minutes: 0, seconds: 0 };
   });
 
   useEffect(() => {
@@ -30,15 +30,19 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
 
       if (difference <= 0) {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        localStorage.removeItem('timeLeft'); // Clear countdown state when finished
         return;
       }
 
-      setTimeLeft({
+      const newTimeLeft = {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60)
-      });
+      };
+
+      setTimeLeft(newTimeLeft);
+      localStorage.setItem('timeLeft', JSON.stringify(newTimeLeft)); // Persist countdown state
     };
 
     calculateTimeLeft();
